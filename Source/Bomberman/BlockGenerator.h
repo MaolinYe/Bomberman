@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Block.h"
+#include "BreakableBlock.h"
 #include "BlockGenerator.generated.h"
 
 UCLASS()
@@ -22,6 +23,8 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, Category = "Block Generation")
 	TSubclassOf<class ABlock>Block;
+	UPROPERTY(EditAnywhere, Category = "Block Generation")
+	TSubclassOf<class ABreakableBlock>BreakableBlock;
 	UPROPERTY(EditAnywhere, Category = "Block Generation|Setting")
 	int Height = 15;
 	UPROPERTY(EditAnywhere, Category = "Block Generation|Setting")

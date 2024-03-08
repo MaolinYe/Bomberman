@@ -69,3 +69,6 @@ void AMainCamera::BeginPlay()
 	PC->SetViewTargetWithBlend(this, 0);
 }
 ```
+## 可销毁方块
+同不可销毁障碍物构建方法
+### 随机生成可销毁方块
