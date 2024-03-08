@@ -8,6 +8,10 @@ ABlockGenerator::ABlockGenerator()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	static ConstructorHelpers::FClassFinder<ABlock> UB(TEXT("/Game/Blueprint/BP_Block.uasset"));
+	Block = UB.Class;
+	static ConstructorHelpers::FClassFinder<ABreakableBlock>BB(TEXT("/Game/Blueprint/BP_BreakableBlock.asset"));
+	BreakableBlock = BB.Class;
 }
 
 // Called when the game starts or when spawned
