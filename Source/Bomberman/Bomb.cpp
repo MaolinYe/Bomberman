@@ -18,7 +18,14 @@ ABomb::ABomb()
 void ABomb::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &ABomb::OnOverlapEnd);
+}
+
+void ABomb::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor == GetOwner()) {
+		BoxCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,ECollisionResponse::ECR_Block);
+	}
 }
 
 // Called every frame

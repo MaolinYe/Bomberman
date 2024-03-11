@@ -47,9 +47,11 @@ void ABombermanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void ABombermanPlayer::SpawnBomb()
 {
 	if (Bomb) {
+		FActorSpawnParameters Parameters;
+		Parameters.Owner = this;
 		FVector Location = GetActorLocation();
 		Location.Z = 140;
-		GetWorld()->SpawnActor<ABomb>(Bomb,Location , FRotator::ZeroRotator);
+		GetWorld()->SpawnActor<ABomb>(Bomb,Location , FRotator::ZeroRotator,Parameters);
 	}
 }
 

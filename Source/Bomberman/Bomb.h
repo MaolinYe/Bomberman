@@ -23,6 +23,8 @@ protected:
 	UStaticMeshComponent* Bomb;
 	UPROPERTY(EditAnywhere, Category = "Component")
 	UBoxComponent* BoxCollision;
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

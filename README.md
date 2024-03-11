@@ -170,3 +170,36 @@ void ABombermanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 }
 ```
 ![img.gif](images/生成炸弹.gif)
+## 炸弹阻挡小机器人
+目前是小机器人可以穿过炸弹，设置了Bomb的碰撞预设为NoCollision，可以给Bomb添加碰撞检测
+```c++
+void ABomb::BeginPlay()
+{
+	Super::BeginPlay();
+	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &ABomb::OnOverlapEnd);
+}
+```
+当第一次碰到小机器人离开的时候，重设碰撞响应为阻挡
+```c++
+void ABomb::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor == GetOwner()) {
+		BoxCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn,ECollisionResponse::ECR_Block);
+	}
+}
+```
+生成炸弹时添加参数拥有者为小机器人
+```c++
+void ABombermanPlayer::SpawnBomb()
+{
+	if (Bomb) {
+		FActorSpawnParameters Parameters;
+		Parameters.Owner = this;
+		FVector Location = GetActorLocation();
+		Location.Z = 140;
+		GetWorld()->SpawnActor<ABomb>(Bomb,Location , FRotator::ZeroRotator,Parameters);
+	}
+}
+```
+这样当小机器人第一次生成炸弹时会和炸弹重叠，再次碰到炸弹时会被阻挡
+![img.gif](images/炸弹阻挡小机器人.gif)
