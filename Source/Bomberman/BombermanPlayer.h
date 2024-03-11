@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Bomb.h"
 #include "BombermanPlayer.generated.h"
 
 UCLASS()
@@ -17,6 +18,8 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
+	UPROPERTY(EditAnywhere, Category = "Bomb")
+	TSubclassOf<ABomb>Bomb;
 	virtual void BeginPlay() override;
 	void MoveVertical(float Value);
 	void MoveHorizontal(float Value);
@@ -26,5 +29,5 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	void SpawnBomb();
 };

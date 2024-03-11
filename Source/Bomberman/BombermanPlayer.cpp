@@ -41,5 +41,15 @@ void ABombermanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveVertical", this, &ABombermanPlayer::MoveVertical);
 	PlayerInputComponent->BindAxis("MoveHorizontal", this, &ABombermanPlayer::MoveHorizontal);
+	PlayerInputComponent->BindAction("SpawnBomb", IE_Pressed, this, &ABombermanPlayer::SpawnBomb);
+}
+
+void ABombermanPlayer::SpawnBomb()
+{
+	if (Bomb) {
+		FVector Location = GetActorLocation();
+		Location.Z = 140;
+		GetWorld()->SpawnActor<ABomb>(Bomb,Location , FRotator::ZeroRotator);
+	}
 }
 

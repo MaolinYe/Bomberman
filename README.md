@@ -119,6 +119,7 @@ void ABlockGenerator::SpawnBreakBlock()
 ```
 ![img.png](images/BreakableBlock.png)
 ## 移动人物
+人物类继承Character，赋值骨骼网格体  
 上下移动
 ```c++
 void ABombermanPlayer::MoveVertical(float Value)
@@ -145,3 +146,27 @@ void ABombermanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 ```
 创建新的游戏模式蓝图，项目设置中更新游戏模式和默认Pawn类
+## 生成炸弹
+炸弹类同之前两个方块构造，碰撞预设设置为NoCollision，让小机器人可以走过去，不然有时候会卡住不能动  
+给小机器人增加生成炸弹方法
+```c++
+void ABombermanPlayer::SpawnBomb()
+{
+	if (Bomb) {
+		FVector Location = GetActorLocation();
+		Location.Z = 140;
+		GetWorld()->SpawnActor<ABomb>(Bomb,Location , FRotator::ZeroRotator);
+	}
+}
+```
+绑定操作映射，按下空格放炸弹
+```c++
+void ABombermanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAxis("MoveVertical", this, &ABombermanPlayer::MoveVertical);
+	PlayerInputComponent->BindAxis("MoveHorizontal", this, &ABombermanPlayer::MoveHorizontal);
+	PlayerInputComponent->BindAction("SpawnBomb", IE_Pressed, this, &ABombermanPlayer::SpawnBomb);
+}
+```
+![img.gif](images/生成炸弹.gif)
