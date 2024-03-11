@@ -73,3 +73,48 @@ void AMainCamera::BeginPlay()
 ## 可销毁方块
 同不可销毁障碍物构建方法
 ### 随机生成可销毁方块
+玩家出生的三角位置不可以生成可销毁方块
+```c++
+	SpawnPlayerPositions = {
+	FIntPoint(0, 0), FIntPoint(0, 1), FIntPoint(1, 0),
+	FIntPoint(Width - 1, 0), FIntPoint(Width - 1, 1), FIntPoint(Width - 2, 0),
+	FIntPoint(0, Height - 1), FIntPoint(0, Height - 2), FIntPoint(1, Height - 1),
+	FIntPoint(Width - 1, Height - 1), FIntPoint(Width - 1, Height - 2), FIntPoint(Width - 2, Height - 1)
+	};
+```
+奇数位置不可生成
+```c++
+void ABlockGenerator::FindSpawnBBPosition()
+{
+	for (int i = 0; i < Width; i++) {
+		for (int j = 0; j < Height; j++) {
+			if (SpawnPlayerPositions.Contains(FIntPoint(i, j))) {
+				continue;
+			}
+			if (i % 2 == 0 || j % 2 == 0) {
+				FVector Position = FVector((i - Width / 2) * BlockSize + 50, (j - Height / 2) * BlockSize + 50, 150);
+				BreakBlockPositions.Add(Position);
+			}
+		}
+	}
+}
+```
+设置一个生成可销毁方块的密度值
+```c++
+	UPROPERTY(EditAnywhere, meta = (ClampMin = "0", ClampMax = "1"), Category = "Block Generation|Setting")
+	float BlockDensity=1;
+```
+随机找一个可生成的位置生成方块，在位置集合中去掉该位置，重复直到达到数量
+```c++
+void ABlockGenerator::SpawnBreakBlock()
+{
+	int BreakBlockNum = BreakBlockPositions.Num() * BlockDensity;
+	for (int i = 0; i < BreakBlockNum; i++) {
+		int Index = FMath::RandRange(0, BreakBlockPositions.Num() - 1);
+		GetWorld()->SpawnActor<ABreakableBlock>(BreakableBlock, BreakBlockPositions[Index], FRotator::ZeroRotator);
+		BreakBlockPositions.RemoveAt(Index);
+	}
+}
+
+```
+![img.png](images/BreakableBlock.png)
