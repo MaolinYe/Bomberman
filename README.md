@@ -118,3 +118,30 @@ void ABlockGenerator::SpawnBreakBlock()
 
 ```
 ![img.png](images/BreakableBlock.png)
+## 移动人物
+上下移动
+```c++
+void ABombermanPlayer::MoveVertical(float Value)
+{
+	AddMovementInput(FVector::ForwardVector,Value);
+}
+```
+左右移动
+```c++
+void ABombermanPlayer::MoveHorizontal(float Value)
+{
+	AddMovementInput(FVector::RightVector,Value);
+}
+```
+绑定轴映射
+```c++
+// Called to bind functionality to input
+void ABombermanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAxis("MoveVertical", this, &ABombermanPlayer::MoveVertical);
+	PlayerInputComponent->BindAxis("MoveHorizontal", this, &ABombermanPlayer::MoveHorizontal);
+}
+
+```
+创建新的游戏模式蓝图，项目设置中更新游戏模式和默认Pawn类
