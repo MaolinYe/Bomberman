@@ -203,3 +203,28 @@ void ABombermanPlayer::SpawnBomb()
 ```
 这样当小机器人第一次生成炸弹时会和炸弹重叠，再次碰到炸弹时会被阻挡
 ![img.gif](images/炸弹阻挡小机器人.gif)
+## 修正炸弹生成的位置
+目前炸弹跟随小机器人的位置生成，但是理论上炸弹应该在每个格子的中心生成，格子中心坐标是类似于（150，-150），先考虑正数的情况，先减去50归百，那么两个格子之间的分界线是50，例如600到700之间是650，先和100取余，和50比较大小，比50大划分给700，根据负数取余的规则，负数的情况也适合
+```c++
+void ABombermanPlayer::SpawnBomb()
+{
+	if (Bomb) {
+		FActorSpawnParameters Parameters;
+		Parameters.Owner = this;
+		FVector Location = GetActorLocation();
+		auto Modify = [](int i)->int {
+			i = i - 50;
+			int mode = i % 100;
+			i = i - mode;
+			if (mode > 50)
+				i = i + 100;
+			return i + 50;
+			};
+		Location.X = Modify((int)Location.X);
+		Location.Y = Modify((int)Location.Y);
+		Location.Z = 140;
+		GetWorld()->SpawnActor<ABomb>(Bomb,Location , FRotator::ZeroRotator,Parameters);
+	}
+}
+```
+![img.gif](images/修正炸弹生成位置.gif)

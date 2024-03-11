@@ -50,6 +50,16 @@ void ABombermanPlayer::SpawnBomb()
 		FActorSpawnParameters Parameters;
 		Parameters.Owner = this;
 		FVector Location = GetActorLocation();
+		auto Modify = [](int i)->int {
+			i = i - 50;
+			int mode = i % 100;
+			i = i - mode;
+			if (mode > 50)
+				i = i + 100;
+			return i + 50;
+			};
+		Location.X = Modify((int)Location.X);
+		Location.Y = Modify((int)Location.Y);
 		Location.Z = 140;
 		GetWorld()->SpawnActor<ABomb>(Bomb,Location , FRotator::ZeroRotator,Parameters);
 	}
