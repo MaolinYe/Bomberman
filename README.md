@@ -53,6 +53,7 @@ void ABlockGenerator::BeginPlay()
 	SpawnBlock(); // 必须在对象完全初始化之后调用，否则GetWorld返回nullptr
 }
 ```
+![img.png](images/Block.png)
 ## 主摄像机
 MainCamera类，继承自摄像机，派生蓝图使用
 ```c++
