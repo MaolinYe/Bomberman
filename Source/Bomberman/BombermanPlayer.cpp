@@ -68,7 +68,8 @@ void ABombermanPlayer::SpawnBomb()
 		Location.X = Modify((int)Location.X);
 		Location.Y = Modify((int)Location.Y);
 		Location.Z = 140;
-		GetWorld()->SpawnActor<ABomb>(Bomb, Location, FRotator::ZeroRotator, Parameters);
+		ABomb* NewBomb=GetWorld()->SpawnActor<ABomb>(Bomb, Location, FRotator::ZeroRotator, Parameters);
+		NewBomb->ExplodeIntensity = this->ExplodeIntensity;
 	}
 }
 

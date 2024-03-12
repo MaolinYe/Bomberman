@@ -342,3 +342,27 @@ void ABomb::ExplodeHere(FVector Location)
 }
 ```
 ![img.gif](images/炸毁方块.gif)
+## 新增道具-强化爆炸范围
+给炸弹人新增属性爆炸强度
+```c++
+	UPROPERTY(EditAnywhere, Category = "Explode")
+	int ExplodeIntensity = 1;
+```
+在生成炸弹的时候给炸弹赋值爆炸强度
+```c++
+		ABomb* NewBomb=GetWorld()->SpawnActor<ABomb>(Bomb, Location, FRotator::ZeroRotator, Parameters);
+		NewBomb->ExplodeIntensity = this->ExplodeIntensity;
+```
+道具类检测与炸弹人的碰撞，使用Overlap需要将网格体碰撞预设为NoCollision，不然无法重叠
+```c++
+void AProp::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepHitResult)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using FPSCharacter."));
+	ABombermanPlayer* Player = Cast<ABombermanPlayer>(OtherActor);
+	if (Player) {
+		Player->ExplodeIntensity++;
+		Destroy();
+	}
+}
+```
+![img.gif](images/新增道具强化爆炸范围.gif)

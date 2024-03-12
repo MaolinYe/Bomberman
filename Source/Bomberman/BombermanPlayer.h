@@ -15,7 +15,8 @@ class BOMBERMAN_API ABombermanPlayer : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ABombermanPlayer();
-
+	UPROPERTY(EditAnywhere, Category = "Explode")
+	int ExplodeIntensity = 1;
 protected:
 	// Called when the game starts or when spawned
 	UPROPERTY(EditAnywhere, Category = "Bomb")
