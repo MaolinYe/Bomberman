@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Prop.h"
 #include "BreakableBlock.generated.h"
 
 UCLASS()
@@ -20,8 +21,12 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, Category = "Component")
 	UStaticMeshComponent* BreakableBlock;
+	UPROPERTY(EditAnywhere, Category = "DropProp")
+	TSubclassOf<AProp>Prop;
+	UPROPERTY(EditAnywhere, Category = "DropProp")
+	float DropPropOdds = 0.5f;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	void OnDestroy();
 };

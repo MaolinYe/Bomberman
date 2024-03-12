@@ -15,7 +15,7 @@ ABombermanPlayer::ABombermanPlayer()
 void ABombermanPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Hi, I am Bomberman."));
 }
 
 void ABombermanPlayer::MoveVertical(float Value)

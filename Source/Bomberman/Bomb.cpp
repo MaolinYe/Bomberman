@@ -52,7 +52,7 @@ void ABomb::ExplodeHere(FVector Location)
 	{
 		ABreakableBlock*BreakBlock = Cast<ABreakableBlock>(HitResult.GetActor());
 		if (BreakBlock) {
-			BreakBlock->Destroy();
+			BreakBlock->OnDestroy();
 		}
 	}
 }

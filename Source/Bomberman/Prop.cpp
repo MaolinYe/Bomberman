@@ -24,7 +24,6 @@ void AProp::BeginPlay()
 
 void AProp::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepHitResult)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using FPSCharacter."));
 	ABombermanPlayer* Player = Cast<ABombermanPlayer>(OtherActor);
 	if (Player) {
 		Player->ExplodeIntensity++;

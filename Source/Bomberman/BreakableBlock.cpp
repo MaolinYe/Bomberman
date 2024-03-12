@@ -19,6 +19,13 @@ void ABreakableBlock::BeginPlay()
 	
 }
 
+void ABreakableBlock::OnDestroy()
+{
+	if(FMath::RandRange(0,1)<DropPropOdds)
+		GetWorld()->SpawnActor<AProp>(Prop, GetActorLocation(), FRotator::ZeroRotator);
+	Destroy();
+}
+
 // Called every frame
 void ABreakableBlock::Tick(float DeltaTime)
 {

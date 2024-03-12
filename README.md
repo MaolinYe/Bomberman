@@ -366,3 +366,21 @@ void AProp::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 }
 ```
 ![img.gif](images/新增道具强化爆炸范围.gif)
+## 几率掉落道具
+给可销毁的方块设置一个概率，以该概率掉落道具
+```c++
+	UPROPERTY(EditAnywhere, Category = "DropProp")
+	TSubclassOf<AProp>Prop;
+	UPROPERTY(EditAnywhere, Category = "DropProp")
+	float DropPropOdds = 0.5f;
+```
+重写一个可销毁方块的销毁函数，以一定概率生成道具
+```c++
+void ABreakableBlock::OnDestroy()
+{
+	if(FMath::RandRange(0,1)<DropPropOdds)
+		GetWorld()->SpawnActor<AProp>(Prop, GetActorLocation(), FRotator::ZeroRotator);
+	Destroy();
+}
+```
+![img.gif](images/几率掉落道具.gif)
