@@ -384,3 +384,45 @@ void ABreakableBlock::OnDestroy()
 }
 ```
 ![img.gif](images/几率掉落道具.gif)
+## HUD倒计时
+创建一个控件蓝图，添加画布面板-垂直框-文本，写一个继承UserWidget的C++类，绑定同名文本，更改控件蓝图的父类为该C++类
+```c++
+	UPROPERTY(Meta=(BindWidget))
+	class UTextBlock* RemainTimer;
+```
+设置文本
+```c++
+void UBombmanHUD::SetRemainTimer(FText TimerText)
+{
+	RemainTimer->SetText(TimerText);
+}
+```
+创建游戏模式，设置游戏时间，声明属性，派生游戏模式蓝图，更改蓝图父类为C++类
+```c++
+	UPROPERTY(EditAnywhere, Category = "Setting")
+	float CountdownTime = 300;
+	FText TimeText;
+	class UBombmanHUD* BombmanHUD;
+```
+更新时间，转化时间字符串
+```c++
+void ABombermanGameMode::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+    CountdownTime -= DeltaSeconds;
+    FTimespan CountdownTimespan = FTimespan::FromSeconds(CountdownTime);
+    FString FormattedTime = FString::Printf(TEXT("%02d:%02d"), CountdownTimespan.GetMinutes(), CountdownTimespan.GetSeconds());
+    TimeText = FText::FromString(FormattedTime);
+    BombmanHUD->SetRemainTimer(TimeText);
+}
+```
+添加该控件蓝图到视口，路径加_C
+```c++
+void ABombermanGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	BombmanHUD = CreateWidget<UBombmanHUD>(GetWorld(), LoadClass<UBombmanHUD>(this, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/WBP_HUD.WBP_HUD_C'")));
+	BombmanHUD->AddToViewport();
+}
+```
+![img.gif](images/倒计时.gif)
