@@ -227,6 +227,24 @@ void ABombermanPlayer::SpawnBomb()
 	}
 }
 ```
+实测发现负数取模得到的还是负数，例如-120%100得到的是-20而不是80，因此需要修改
+```c++
+		auto Modify = [](int i)->int {
+			i = i - 50;
+			int mode = i % 100;
+			i = i - mode;
+			if (mode > 0) {
+				if (mode > 50)
+					i = i + 100;
+				return i + 50;
+			}
+			else {
+				if (mode > -50)
+					i = i + 100;
+				return i - 50;
+			}
+        };
+```
 ![img.gif](images/修正炸弹生成位置.gif)
 ## 炸弹销毁
 设置定时器让炸弹销毁

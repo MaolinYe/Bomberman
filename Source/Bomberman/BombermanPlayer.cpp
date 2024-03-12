@@ -6,7 +6,7 @@
 // Sets default values
 ABombermanPlayer::ABombermanPlayer()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -15,17 +15,17 @@ ABombermanPlayer::ABombermanPlayer()
 void ABombermanPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void ABombermanPlayer::MoveVertical(float Value)
 {
-	AddMovementInput(FVector::ForwardVector,Value);
+	AddMovementInput(FVector::ForwardVector, Value);
 }
 
 void ABombermanPlayer::MoveHorizontal(float Value)
 {
-	AddMovementInput(FVector::RightVector,Value);
+	AddMovementInput(FVector::RightVector, Value);
 }
 
 // Called every frame
@@ -54,14 +54,21 @@ void ABombermanPlayer::SpawnBomb()
 			i = i - 50;
 			int mode = i % 100;
 			i = i - mode;
-			if (mode > 50)
-				i = i + 100;
-			return i + 50;
+			if (mode > 0) {
+				if (mode > 50)
+					i = i + 100;
+				return i + 50;
+			}
+			else {
+				if (mode > -50)
+					i = i + 100;
+				return i - 50;
+			}
 			};
 		Location.X = Modify((int)Location.X);
 		Location.Y = Modify((int)Location.Y);
 		Location.Z = 140;
-		GetWorld()->SpawnActor<ABomb>(Bomb,Location , FRotator::ZeroRotator,Parameters);
+		GetWorld()->SpawnActor<ABomb>(Bomb, Location, FRotator::ZeroRotator, Parameters);
 	}
 }
 

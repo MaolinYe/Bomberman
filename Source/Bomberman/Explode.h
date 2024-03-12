@@ -14,8 +14,7 @@ class BOMBERMAN_API AExplode : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AExplode();
-	UPROPERTY(BlueprintReadWrite, Category = "Explode")
-	float ExplodeIntensity = 1;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
