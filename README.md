@@ -323,3 +323,22 @@ void ABomb::Explode()
 }
 ```
 ![img.gif](images/炸弹爆炸范围.gif)
+## 炸毁方块
+利用射线检测两个位置之间是否存在方块，使用类型转换，如果转换成功说明是可销毁的方块
+```c++
+void ABomb::ExplodeHere(FVector Location)
+{
+	if (ExplodeEffect)
+		GetWorld()->SpawnActor<AExplode>(ExplodeEffect, Location, FRotator::ZeroRotator);
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, GetActorLocation(), Location, ECollisionChannel::ECC_WorldStatic, CollisionParams))
+	{
+		ABreakableBlock*BreakBlock = Cast<ABreakableBlock>(HitResult.GetActor());
+		if (BreakBlock) {
+			BreakBlock->Destroy();
+		}
+	}
+}
+```
+![img.gif](images/炸毁方块.gif)

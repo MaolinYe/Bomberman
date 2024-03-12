@@ -2,7 +2,7 @@
 
 
 #include "Bomb.h"
-
+#include "BreakableBlock.h"
 // Sets default values
 ABomb::ABomb()
 {
@@ -46,6 +46,15 @@ void ABomb::ExplodeHere(FVector Location)
 {
 	if (ExplodeEffect)
 		GetWorld()->SpawnActor<AExplode>(ExplodeEffect, Location, FRotator::ZeroRotator);
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, GetActorLocation(), Location, ECollisionChannel::ECC_WorldStatic, CollisionParams))
+	{
+		ABreakableBlock*BreakBlock = Cast<ABreakableBlock>(HitResult.GetActor());
+		if (BreakBlock) {
+			BreakBlock->Destroy();
+		}
+	}
 }
 
 // Called every frame
