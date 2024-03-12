@@ -298,3 +298,28 @@ void ABomb::Explode()
 }
 ```
 ![img.gif](images/炸弹爆炸特效.gif)
+## 炸弹爆炸范围
+根据爆炸强度在水平方向和竖直方向上爆炸，写一个函数在某个位置生成爆炸特效
+```c++
+void ABomb::ExplodeHere(FVector Location)
+{
+	if (ExplodeEffect)
+		GetWorld()->SpawnActor<AExplode>(ExplodeEffect, Location, FRotator::ZeroRotator);
+}
+```
+先在此地爆炸，再向四个方向生成爆炸
+```c++
+void ABomb::Explode()
+{
+	if (ExplodeEffect)
+		GetWorld()->SpawnActor<AExplode>(ExplodeEffect, GetActorLocation(), FRotator::ZeroRotator);
+	for (int i = 1; i <= ExplodeIntensity; i++) {
+		ExplodeHere(GetActorLocation() + i * FVector(100, 0, 0));
+		ExplodeHere(GetActorLocation() + i * FVector(0, 100, 0));
+		ExplodeHere(GetActorLocation() + i * FVector(-100, 0, 0));
+		ExplodeHere(GetActorLocation() + i * FVector(0, -100, 0));
+	}
+	Destroy();
+}
+```
+![img.gif](images/炸弹爆炸范围.gif)

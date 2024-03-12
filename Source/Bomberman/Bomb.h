@@ -16,7 +16,8 @@ class BOMBERMAN_API ABomb : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABomb();
-
+	UPROPERTY(EditAnywhere, Category = "Explode")
+	int ExplodeIntensity = 1;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -32,6 +33,7 @@ protected:
 	void Explode();
 	UPROPERTY(EditAnywhere, Category = "Explode")
 	TSubclassOf<AExplode>ExplodeEffect;
+	void ExplodeHere(FVector Location);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
