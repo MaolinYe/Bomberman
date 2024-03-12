@@ -25,6 +25,10 @@ protected:
 	UBoxComponent* BoxCollision;
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	FTimerHandle TimerHandleExplode;
+	UPROPERTY(EditAnywhere, Category = "Explode")
+	float ExplodeTime = 1;
+	void Explode();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -228,3 +228,29 @@ void ABombermanPlayer::SpawnBomb()
 }
 ```
 ![img.gif](images/修正炸弹生成位置.gif)
+## 炸弹销毁
+设置定时器让炸弹销毁
+```c++
+	FTimerHandle TimerHandleExplode;
+	UPROPERTY(EditAnywhere, Category = "Explode")
+	float ExplodeTime = 1;
+	void Explode();
+```
+炸弹自我销毁
+```c++
+void ABomb::Explode()
+{
+	Destroy();
+}
+
+```
+设置定时器调用的函数
+```c++
+void ABomb::BeginPlay()
+{
+	Super::BeginPlay();
+	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &ABomb::OnOverlapEnd);
+	GetWorldTimerManager().SetTimer(TimerHandleExplode, this, &ABomb::Explode, ExplodeTime);
+}
+```
+![img.gif](images/炸弹销毁.gif)
