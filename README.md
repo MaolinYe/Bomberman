@@ -254,3 +254,29 @@ void ABomb::BeginPlay()
 }
 ```
 ![img.gif](images/炸弹销毁.gif)
+## 炸弹爆炸特效
+添加初学者内容包，里面有爆炸的粒子系统，创建一个爆炸C++类派生蓝图使用爆炸粒子系统，设置爆炸强度和自我销毁时间
+```c++
+public:	
+	// Sets default values for this actor's properties
+	AExplode();
+	UPROPERTY(BlueprintReadWrite, Category = "Explode")
+	float ExplodeIntensity = 1;
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	FTimerHandle TimerHandleExplode;
+	UPROPERTY(EditAnywhere, Category = "Explode")
+	float ExplodeTime = 1;
+	void Explode();
+```
+在炸弹即将销毁的时候生成爆炸效果
+```c++
+void ABomb::Explode()
+{
+	if(ExplodeEffect)
+		GetWorld()->SpawnActor<AExplode>(ExplodeEffect, GetActorLocation(), FRotator::ZeroRotator);
+	Destroy();
+}
+```
+![img.gif](images/炸弹爆炸特效.gif)

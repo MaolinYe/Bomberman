@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "Explode.h"
 #include "Bomb.generated.h"
 
 UCLASS()
@@ -29,6 +30,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Explode")
 	float ExplodeTime = 1;
 	void Explode();
+	UPROPERTY(EditAnywhere, Category = "Explode")
+	TSubclassOf<AExplode>ExplodeEffect;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

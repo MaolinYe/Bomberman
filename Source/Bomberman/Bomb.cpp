@@ -31,6 +31,8 @@ void ABomb::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Other
 
 void ABomb::Explode()
 {
+	if(ExplodeEffect)
+		GetWorld()->SpawnActor<AExplode>(ExplodeEffect, GetActorLocation(), FRotator::ZeroRotator);
 	Destroy();
 }
 
