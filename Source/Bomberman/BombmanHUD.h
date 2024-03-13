@@ -7,14 +7,23 @@
 #include "BombmanHUD.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class BOMBERMAN_API UBombmanHUD : public UUserWidget
 {
 	GENERATED_BODY()
-	UPROPERTY(Meta=(BindWidget))
+	UPROPERTY(Meta = (BindWidget))
 	class UTextBlock* RemainTimer;
+	UPROPERTY(Meta = (BindWidget))
+	class UCanvasPanel* MenuBackground;
+	UPROPERTY(Meta = (BindWidget))
+	class UTextBlock* GameResult;
+	UPROPERTY(EditAnywhere, Category = "Setting")
+	FText WinText = FText::FromString(TEXT("You Win!"));
+	UPROPERTY(EditAnywhere, Category = "Setting")
+	FText LoseText = FText::FromString(TEXT("You Lost!"));
 public:
 	void SetRemainTimer(FText TimerText);
+	void SetGameResult(bool Win);
 };

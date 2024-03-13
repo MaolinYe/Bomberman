@@ -34,6 +34,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Explode")
 	TSubclassOf<AExplode>ExplodeEffect;
 	void ExplodeHere(FVector Location);
+	class ABombermanGameMode* GameMode;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

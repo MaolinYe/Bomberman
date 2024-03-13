@@ -16,10 +16,15 @@ ABombermanGameMode::ABombermanGameMode()
 }
 void ABombermanGameMode::Tick(float DeltaSeconds)
 {
-    Super::Tick(DeltaSeconds);
-    CountdownTime -= DeltaSeconds;
-    FTimespan CountdownTimespan = FTimespan::FromSeconds(CountdownTime);
-    FString FormattedTime = FString::Printf(TEXT("%02d:%02d"), CountdownTimespan.GetMinutes(), CountdownTimespan.GetSeconds());
-    TimeText = FText::FromString(FormattedTime);
-    BombmanHUD->SetRemainTimer(TimeText);
+	Super::Tick(DeltaSeconds);
+	CountdownTime -= DeltaSeconds;
+	FTimespan CountdownTimespan = FTimespan::FromSeconds(CountdownTime);
+	FString FormattedTime = FString::Printf(TEXT("%02d:%02d"), CountdownTimespan.GetMinutes(), CountdownTimespan.GetSeconds());
+	TimeText = FText::FromString(FormattedTime);
+	BombmanHUD->SetRemainTimer(TimeText);
+}
+
+void ABombermanGameMode::GameOver(bool Win)
+{
+	BombmanHUD->SetGameResult(Win);
 }

@@ -22,4 +22,5 @@ protected:
 public:
 	ABombermanGameMode();
 	virtual void Tick(float DeltaSeconds)override;
+	void GameOver(bool Win);
 };

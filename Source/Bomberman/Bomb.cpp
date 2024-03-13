@@ -3,6 +3,9 @@
 
 #include "Bomb.h"
 #include "BreakableBlock.h"
+#include "BombermanGameMode.h"
+#include "Kismet/GameplayStatics.h"
+#include "BombermanPlayer.h"
 // Sets default values
 ABomb::ABomb()
 {
@@ -20,6 +23,7 @@ void ABomb::BeginPlay()
 	Super::BeginPlay();
 	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &ABomb::OnOverlapEnd);
 	GetWorldTimerManager().SetTimer(TimerHandleExplode, this, &ABomb::Explode, ExplodeTime);
+	GameMode = Cast<ABombermanGameMode>(UGameplayStatics::GetGameMode(this));
 }
 
 void ABomb::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -53,6 +57,12 @@ void ABomb::ExplodeHere(FVector Location)
 		ABreakableBlock*BreakBlock = Cast<ABreakableBlock>(HitResult.GetActor());
 		if (BreakBlock) {
 			BreakBlock->OnDestroy();
+		}
+		else {
+			ABombermanPlayer* Player = Cast<ABombermanPlayer>(HitResult.GetActor());
+			if (Player) {
+				GameMode->GameOver(false);
+			}
 		}
 	}
 }

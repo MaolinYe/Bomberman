@@ -426,3 +426,67 @@ void ABombermanGameMode::BeginPlay()
 }
 ```
 ![img.gif](images/倒计时.gif)
+## 游戏结束
+添加游戏结束文字和面板
+```c++
+	UPROPERTY(Meta = (BindWidget))
+	class UCanvasPanel* MenuBackground;
+	UPROPERTY(Meta = (BindWidget))
+	class UTextBlock* GameResult;
+	UPROPERTY(EditAnywhere, Category = "Setting")
+	FText WinText = FText::FromString(TEXT("You Win!"));
+	UPROPERTY(EditAnywhere, Category = "Setting")
+	FText LoseText = FText::FromString(TEXT("You Lost!"));
+```
+根据游戏结束状态设置文案
+```c++
+void UBombmanHUD::SetGameResult(bool Win)
+{
+	if (Win)
+		GameResult->SetText(WinText);
+	else
+		GameResult->SetText(LoseText);
+	MenuBackground->SetVisibility(ESlateVisibility::Visible);
+}
+```
+游戏模式添加GameOver方法调用设置游戏结束状态方法
+```c++
+void ABombermanGameMode::GameOver(bool Win)
+{
+	BombmanHUD->SetGameResult(Win);
+}
+```
+炸弹类引用游戏模式
+```c++
+void ABomb::BeginPlay()
+{
+	Super::BeginPlay();
+	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &ABomb::OnOverlapEnd);
+	GetWorldTimerManager().SetTimer(TimerHandleExplode, this, &ABomb::Explode, ExplodeTime);
+	GameMode = Cast<ABombermanGameMode>(UGameplayStatics::GetGameMode(this));
+}
+```
+炸弹爆炸时检测是否炸到小机器人
+```c++
+void ABomb::ExplodeHere(FVector Location)
+{
+	if (ExplodeEffect)
+		GetWorld()->SpawnActor<AExplode>(ExplodeEffect, Location, FRotator::ZeroRotator);
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, GetActorLocation(), Location, ECollisionChannel::ECC_WorldStatic, CollisionParams))
+	{
+		ABreakableBlock*BreakBlock = Cast<ABreakableBlock>(HitResult.GetActor());
+		if (BreakBlock) {
+			BreakBlock->OnDestroy();
+		}
+		else {
+			ABombermanPlayer* Player = Cast<ABombermanPlayer>(HitResult.GetActor());
+			if (Player) {
+				GameMode->GameOver(false);
+			}
+		}
+	}
+}
+```
+![img.gif](images/被炸死.gif)
