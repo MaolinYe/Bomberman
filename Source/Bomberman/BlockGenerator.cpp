@@ -2,7 +2,8 @@
 
 
 #include "BlockGenerator.h"
-
+#include "BombermanGameMode.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 ABlockGenerator::ABlockGenerator()
 {
@@ -66,6 +67,7 @@ void ABlockGenerator::FindSpawnBBPosition()
 void ABlockGenerator::SpawnBreakBlock()
 {
 	int BreakBlockNum = BreakBlockPositions.Num() * BlockDensity;
+	Cast<ABombermanGameMode>(UGameplayStatics::GetGameMode(this))->BreakableBlockNum = BreakBlockNum;
 	for (int i = 0; i < BreakBlockNum; i++) {
 		int Index = FMath::RandRange(0, BreakBlockPositions.Num() - 1);
 		GetWorld()->SpawnActor<ABreakableBlock>(BreakableBlock, BreakBlockPositions[Index], FRotator::ZeroRotator);

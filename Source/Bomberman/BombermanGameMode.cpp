@@ -5,11 +5,18 @@
 #include "Kismet/KismetStringLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "BombmanHUD.h"
+#include "HAL/PlatformProcess.h"
 void ABombermanGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	BombmanHUD = CreateWidget<UBombmanHUD>(GetWorld(), LoadClass<UBombmanHUD>(this, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprint/WBP_HUD.WBP_HUD_C'")));
 	BombmanHUD->AddToViewport();
+}
+bool ABombermanGameMode::IsGameOver()
+{
+	if (BreakableBlockNum == 0)
+		return true;
+	return false;
 }
 ABombermanGameMode::ABombermanGameMode()
 {
@@ -17,6 +24,10 @@ ABombermanGameMode::ABombermanGameMode()
 }
 void ABombermanGameMode::Tick(float DeltaSeconds)
 {
+	if (IsGameOver()) {
+		GameOver(true);
+		return;
+	}
 	Super::Tick(DeltaSeconds);
 	CountdownTime -= DeltaSeconds;
 	FTimespan CountdownTimespan = FTimespan::FromSeconds(CountdownTime);
@@ -27,6 +38,7 @@ void ABombermanGameMode::Tick(float DeltaSeconds)
 
 void ABombermanGameMode::GameOver(bool Win)
 {
+	FPlatformProcess::Sleep(0.5);
 	UGameplayStatics::GetPlayerController(this, 0)->bShowMouseCursor = true;
 	BombmanHUD->SetGameResult(Win);
 }

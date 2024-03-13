@@ -19,9 +19,11 @@ protected:
 	FText TimeText;
 	class UBombmanHUD* BombmanHUD;
 	virtual void BeginPlay()override;
+	bool IsGameOver();
 public:
 	ABombermanGameMode();
 	virtual void Tick(float DeltaSeconds)override;
 	void GameOver(bool Win);
 	void Restart();
+	int BreakableBlockNum;
 };

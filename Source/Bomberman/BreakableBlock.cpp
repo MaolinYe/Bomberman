@@ -2,7 +2,8 @@
 
 
 #include "BreakableBlock.h"
-
+#include "BombermanGameMode.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 ABreakableBlock::ABreakableBlock()
 {
@@ -23,6 +24,7 @@ void ABreakableBlock::OnDestroy()
 {
 	if(FMath::RandRange(0,1)<DropPropOdds)
 		GetWorld()->SpawnActor<AProp>(Prop, GetActorLocation(), FRotator::ZeroRotator);
+	Cast<ABombermanGameMode>(UGameplayStatics::GetGameMode(this))->BreakableBlockNum--;
 	Destroy();
 }
 

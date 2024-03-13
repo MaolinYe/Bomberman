@@ -532,3 +532,53 @@ bool UBombmanHUD::Initialize()
 	return true;
 }
 ```
+## 游戏胜利条件设置
+设置游戏胜利的条件为销毁所有方块，给游戏模式添加可销毁方块数量，在生成可销毁方块的时候更新这个值
+```c++
+void ABlockGenerator::SpawnBreakBlock()
+{
+	int BreakBlockNum = BreakBlockPositions.Num() * BlockDensity;
+	Cast<ABombermanGameMode>(UGameplayStatics::GetGameMode(this))->BreakableBlockNum = BreakBlockNum;
+	for (int i = 0; i < BreakBlockNum; i++) {
+		int Index = FMath::RandRange(0, BreakBlockPositions.Num() - 1);
+		GetWorld()->SpawnActor<ABreakableBlock>(BreakableBlock, BreakBlockPositions[Index], FRotator::ZeroRotator);
+		BreakBlockPositions.RemoveAt(Index);
+	}
+}
+```
+在方块被销毁的时候，更新游戏模式中的记录
+```c++
+void ABreakableBlock::OnDestroy()
+{
+	if(FMath::RandRange(0,1)<DropPropOdds)
+		GetWorld()->SpawnActor<AProp>(Prop, GetActorLocation(), FRotator::ZeroRotator);
+	Cast<ABombermanGameMode>(UGameplayStatics::GetGameMode(this))->BreakableBlockNum--;
+	Destroy();
+}
+```
+游戏模式添加判断游戏结束的方法
+```c++
+bool ABombermanGameMode::IsGameOver()
+{
+	if (BreakableBlockNum == 0)
+		return true;
+	return false;
+}
+```
+每帧判断游戏是否结束
+```c++
+void ABombermanGameMode::Tick(float DeltaSeconds)
+{
+	if (IsGameOver()) {
+		GameOver(true);
+		return;
+	}
+	Super::Tick(DeltaSeconds);
+	CountdownTime -= DeltaSeconds;
+	FTimespan CountdownTimespan = FTimespan::FromSeconds(CountdownTime);
+	FString FormattedTime = FString::Printf(TEXT("%02d:%02d"), CountdownTimespan.GetMinutes(), CountdownTimespan.GetSeconds());
+	TimeText = FText::FromString(FormattedTime);
+	BombmanHUD->SetRemainTimer(TimeText);
+}
+```
+![img.gif](images/游戏胜利.gif)
