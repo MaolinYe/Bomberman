@@ -490,3 +490,45 @@ void ABomb::ExplodeHere(FVector Location)
 }
 ```
 ![img.gif](images/被炸死.gif)
+## 重新开始
+游戏模式里面游戏结束时启用鼠标
+```c++
+void ABombermanGameMode::GameOver(bool Win)
+{
+	UGameplayStatics::GetPlayerController(this, 0)->bShowMouseCursor = true;
+	BombmanHUD->SetGameResult(Win);
+}
+```
+重新加载关卡
+```c++
+void ABombermanGameMode::Restart()
+{
+	UGameplayStatics::OpenLevel(this, "Bomber");
+}
+```
+声明绑定按钮和调用函数，注意按钮点击事件绑定的函数必须加UFUNCTION()否则无法调用
+```c++
+	virtual bool Initialize()override;
+	UPROPERTY(Meta = (BindWidget))
+	class UButton* RestartButton;
+	UFUNCTION()
+	void Replay();
+```
+点击按钮调用事件调用游戏模式的重新开始
+```c++
+void UBombmanHUD::Replay()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Hey, restart."));
+	Cast<ABombermanGameMode>(UGameplayStatics::GetGameMode(this))->Restart();
+}
+```
+初始化里面绑定按钮点击事件
+```c++
+bool UBombmanHUD::Initialize()
+{
+	if(!Super::Initialize())
+	return false;
+	RestartButton->OnClicked.AddDynamic(this, &UBombmanHUD::Replay);
+	return true;
+}
+```

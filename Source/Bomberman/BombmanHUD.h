@@ -23,6 +23,12 @@ class BOMBERMAN_API UBombmanHUD : public UUserWidget
 	FText WinText = FText::FromString(TEXT("You Win!"));
 	UPROPERTY(EditAnywhere, Category = "Setting")
 	FText LoseText = FText::FromString(TEXT("You Lost!"));
+protected:
+	virtual bool Initialize()override;
+	UPROPERTY(Meta = (BindWidget))
+	class UButton* RestartButton;
+	UFUNCTION()
+	void Replay();
 public:
 	void SetRemainTimer(FText TimerText);
 	void SetGameResult(bool Win);

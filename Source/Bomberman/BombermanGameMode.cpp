@@ -3,6 +3,7 @@
 
 #include "BombermanGameMode.h"
 #include "Kismet/KismetStringLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "BombmanHUD.h"
 void ABombermanGameMode::BeginPlay()
 {
@@ -26,5 +27,11 @@ void ABombermanGameMode::Tick(float DeltaSeconds)
 
 void ABombermanGameMode::GameOver(bool Win)
 {
+	UGameplayStatics::GetPlayerController(this, 0)->bShowMouseCursor = true;
 	BombmanHUD->SetGameResult(Win);
+}
+
+void ABombermanGameMode::Restart()
+{
+	UGameplayStatics::OpenLevel(this, "Bomber");
 }
